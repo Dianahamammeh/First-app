@@ -1,0 +1,18 @@
+<?php
+
+namespace App\Models;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Model;
+
+class Author extends Model
+{
+    protected $fillable = [
+        'name',
+        'email'
+    ];
+    public function posts(): HasMany
+    {
+        return $this->hasMany(Post::class);
+    }
+}
