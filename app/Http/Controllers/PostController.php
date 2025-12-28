@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Post;
 use Illuminate\Http\Request;
+use App\Http\Requests\PostRequest;
 
 class PostController extends Controller
 {
@@ -33,18 +34,9 @@ class PostController extends Controller
         ]);
     }
 
-    public function store(Request $request)
+    public function store(PostRequest $request)
     {
-        $data = $request->validate([
-            'title' => 'required|string|max:255|unique:posts,title',
-            'content' => 'required|string',
-            'published_at' => 'nullable|date',
-            'category_id' => 'required|exists:categories,id',
-            'author_id' => 'required|exists:authors,id'
-        ]);
-
-        $post = Post::create($data);
-
+        $post = Post::create($request->validated());
         return response()->json([
             'status' => 'created',
             'data' => $post
@@ -54,27 +46,18 @@ class PostController extends Controller
     public function show(Post $post)
     {
         return response()->json([
+
             'status' => 'success',
             'data' => $post->load(['category', 'author', 'comments'])
         ]);
     }
 
-    public function update(Request $request, Post $post)
+    public function update(PostRequest $request, Post $post)
     {
-        $data = $request->validate([
-            'title' => 'required|string|max:255|unique:posts,title,' . $post->id,
-            'content' => 'required|string',
-            'published_at' => 'nullable|date',
-            'category_id' => 'required|exists:categories,id',
-            'author_id' => 'required|exists:authors,id'
-        ]);
-
+        $data = $request->validated();
         $post->update($data);
-
         return response()->json([
-            'status' => 'updated',
-            'data' => $post
-        ]);
+            'status' => 'updated', 'data' => $post]);
     }
 
     public function destroy(Post $post)

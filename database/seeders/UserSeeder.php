@@ -1,9 +1,9 @@
 <?php
 
 namespace Database\Seeders;
-
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use App\Models\User;
+use Illuminate\Support\Facades\Hash;
 
 class UserSeeder extends Seeder
 {
@@ -12,10 +12,19 @@ class UserSeeder extends Seeder
      */
     public function run(): void
     {
-        User::create([
-            'name' => 'Diana',
-            'email' => 'diana@procoder.com',
-            'password' => Hash::make('123321'),
-        ]);
+        User::updateOrCreate(
+            ['email' => 'diana@procoder.com'],
+            [
+                'name' => 'Diana',
+                'password' => Hash::make('123321'),
+            ]
+        );
+        User::updateOrCreate(
+            ['email' => 'test@example.com'],
+            [
+                'name' => 'Test User',
+                'password' => Hash::make('password'),
+            ]
+        );
     }
 }
